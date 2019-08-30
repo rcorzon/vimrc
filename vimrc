@@ -18,8 +18,6 @@ Plugin 'tpope/vim-fugitive'
 " Plugin 'L9'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -42,7 +40,11 @@ let g:airline_theme='light'
 " https://github.com/powerline/fonts
 "
 
-Plugin 'mhinz/vim-startify'
+Plugin 'mhinz/vim-startify'	"Custom start buffer
+Plugin 'scrooloose/nerdtree'	"A tree explorer plugin
+"Plugin 'valloric/youcompleteme'	"Autocomplete	(PENDING)
+Plugin 'ctrlpvim/ctrlp.vim'	"Goto Sublime/VSCode like
+Plugin 'scrooloose/syntastic'	"Syntax check
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -64,5 +66,5 @@ filetype plugin indent on    " required
 " Configuración personal
 " ---------------------
 "
-set number
+set relativenumber
 syntax on
