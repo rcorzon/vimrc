@@ -42,6 +42,8 @@ let g:airline_theme='light'
 " https://github.com/powerline/fonts
 "
 
+Plugin 'mhinz/vim-startify'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
