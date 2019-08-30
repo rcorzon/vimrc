@@ -33,6 +33,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline_theme='light'
 
 " In order to show the '>' characters in the Vim bar, the package
 " powerline-fonts is required, so, you will have to install it following the
