@@ -36,7 +36,7 @@ let g:airline_powerline_fonts = 1
 
 " In order to show the '>' characters in the Vim bar, the package
 " powerline-fonts is required, so, you will have to install it following the
-" instructions of the following link:
+" instructions of this link:
 "
 " https://github.com/powerline/fonts
 "
