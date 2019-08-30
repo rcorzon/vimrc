@@ -65,3 +65,4 @@ filetype plugin indent on    " required
 " ---------------------
 "
 set number
+syntax on
