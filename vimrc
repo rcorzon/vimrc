@@ -67,4 +67,5 @@ filetype plugin indent on    " required
 " ---------------------
 "
 set relativenumber
+set number
 syntax on
