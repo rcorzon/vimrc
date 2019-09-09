@@ -63,9 +63,12 @@ filetype plugin indent on    " required
 
 
 
-" Configuración personal
-" ---------------------
+" Personal settings
+" -----------------
 "
 set relativenumber
 set number
 syntax on
+
+nmap <C-j> = <C-e>
+nmap <C-k> = <C-y>
