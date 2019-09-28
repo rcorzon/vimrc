@@ -31,7 +31,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme='light'
+let g:airline_theme='badwolf'
 
 " In order to show the '>' characters in the Vim bar, the package
 " powerline-fonts is required, so, you will have to install it following the
@@ -70,5 +70,5 @@ set relativenumber
 set number
 syntax on
 
-nmap <C-j> = <C-e>
-nmap <C-k> = <C-y>
+"More comfy for spanish layouts
+nmap ñ :
