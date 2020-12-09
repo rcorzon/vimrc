@@ -13,14 +13,14 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
 " Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
+" Plugin 'git://git.wincent.com/command-t.git'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
@@ -29,6 +29,7 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 "
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'severin-lemaignan/vim-minimap'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme='badwolf'
@@ -41,10 +42,6 @@ let g:airline_theme='badwolf'
 "
 
 Plugin 'mhinz/vim-startify'	"Custom start buffer
-Plugin 'scrooloose/nerdtree'	"A tree explorer plugin
-"Plugin 'valloric/youcompleteme'	"Autocomplete	(PENDING)
-Plugin 'ctrlpvim/ctrlp.vim'	"Goto Sublime/VSCode like
-Plugin 'scrooloose/syntastic'	"Syntax check
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -72,3 +69,12 @@ syntax on
 
 "More comfy for spanish layouts
 nmap ñ :
+nmap Ñ :
+
+if has('win32')
+	set shell=powershell shellquote= shellpipe=\| shellxquote=
+	set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+	set shellredir=\|\ Out-File\ -Encoding\ UTF8
+endif
+
+
