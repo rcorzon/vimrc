@@ -1,4 +1,3 @@
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -54,6 +53,13 @@ filetype plugin indent on    " required
 " Personal settings
 " -----------------
 
+let g:pluginList = [
+  \"mhinz/vim-startify",
+  \"vim-airline/vim-airline",
+  \"vim-airline/vim-airline-themes",
+  \"vim-airline/vim-airline-asdfasdf",
+  \]
+
 Plugin 'mhinz/vim-startify'	"Custom start buffer
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -86,6 +92,8 @@ if has('win32') || has('win64')
 
 	let isGitInstalled = system(checkGitWinFunction)
 
+	" Kinda sloppy - We are measuring the string length, if it is longer
+	" than 2, it means the terminal returned an error -. 
 	if strlen(isGitInstalled) > 2
 		"echo "Git is not available in your sistem."
 	else
@@ -98,7 +106,23 @@ if has('win32') || has('win64')
 
 	endif
 
-
 endif
+
+
+function CheckIfPluginsAreInstalled()
+	let slash = "/"
+	if has('win32') || has('win64')
+		let slash = "\\"
+	endif
+
+	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
+
+	for plugin in g:pluginList
+		let pluginFolder = split(plugin, "/")
+		let pluginPath = pluginsPath . slash . pluginFolder[1]
+		echo pluginPath . ">  " . isdirectory(pluginPath)
+	endfor
+
+endfunction
 
 
