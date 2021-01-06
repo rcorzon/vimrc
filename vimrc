@@ -1,4 +1,3 @@
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -97,7 +96,7 @@ function CheckIfPluginsAreInstalled()
 
 	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
 
-	let g:pendingPlugins = []
+	let pendingPlugins = 0
 
 	for plugin in g:pluginList
 
@@ -105,29 +104,16 @@ function CheckIfPluginsAreInstalled()
 		let pluginPath = pluginsPath . slash . pluginFolder[1]
 
 		if isdirectory(pluginPath) == 0
-			call insert(g:pendingPlugins, plugin)
+			let pendingPlugins = 1
+			continue
 		endif
 	endfor
 
-	if len(g:pendingPlugins) > 0
+	if pendingPlugins == 1
 		echo "There are missing plugins. Attempting to install them..."
-		call InstallPlugins(g:pendingPlugins)
+		exec 'PluginInstall'
 	endif
 
-endfunction
-
-
-
-
-function InstallPlugins(plugins)
-	let g:pluginString = ""
-	
-	for plugin in a:plugins
-		let g:pluginString = g:pluginString . " " . plugin
-	endfor
-
-	source %
-	exe "PluginInstall " . g:pluginString
 endfunction
 
 
