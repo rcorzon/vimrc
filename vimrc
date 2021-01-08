@@ -1,3 +1,10 @@
+
+
+" --------------------------------------------------------------
+" all the variables used in interactive dialogs are stored above
+
+
+
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -61,7 +68,6 @@ nmap <C-Tab> gt
 " functions to load before.
 function ConfigureVim()
 
-
 	if has('win32') || has('win64')
 		" Set powershell as the default shell for 
 		" ! commands and terminal mode instead of CMD
@@ -85,14 +91,14 @@ function ConfigureVim()
 	endif
 endfunction
 
+function CheckAndInstallPlugins()
+
+endfunction
+
 
 
 function CheckIfPluginsAreInstalled()
-	let slash = "/"
-
-	if has('win32') || has('win64')
-		let slash = "\\"
-	endif
+	let slash = GetOSSlash()
 
 	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
 
@@ -116,6 +122,13 @@ function CheckIfPluginsAreInstalled()
 
 endfunction
 
+function GetOSSlash()
+	if has('win32') || has('win64')
+		return "\\"
+	endif
+		return "/"
+endfunction
+
 
 " Use Lex as a file explorer instead of e
 " to open directories.
@@ -136,6 +149,17 @@ funct! GetExecOutput(command)
     redir END
     return output
 endfunct!
+
+function AskVim()
+   let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again", 2)
+   echo choice
+endfunction
+
+function WriteToTopVimrc(codeString)
+	let vimrc = readfile($MYVIMRC)
+	call writefile([a:codeString], $MYVIMRC, "b")
+	call writefile(vimrc, $MYVIMRC, "a")
+endfunction
 
 call ConfigureVim()
 
