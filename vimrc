@@ -1,5 +1,4 @@
 
-
 " --------------------------------------------------------------
 " all the variables used in interactive dialogs are stored above
 
@@ -63,12 +62,12 @@ nmap ñ :
 nmap Ñ :
 nmap <C-Tab> gt
 
-
-" Run this function at the bottom of the file to allow all the called 
-" functions to load before.
+" Configures VIM based on the OS which is running in.
 function ConfigureVim()
 
+	let gitAvailable = 0
 	if has('win32') || has('win64')
+		
 		" Set powershell as the default shell for 
 		" ! commands and terminal mode instead of CMD
 		set shell=powershell shellquote= shellpipe=\| shellxquote=
@@ -82,20 +81,34 @@ function ConfigureVim()
 		" Kinda sloppy - We are measuring the string length, if it is longer
 		" than 2, it returned an error -.
 
-		if strlen(isGitInstalled) > 2
-			"echo "Git is not available in your system."
-		else
-			"call CheckIfPluginsAreInstalled()
+		if strlen(isGitInstalled) <= 2
+			let gitAvailable = 1
 		endif
+	endif
 
+	if has('unix')	
+		" TODO: Configure VIM for Linux and Mac
+	endif
+
+	
+	if !exists("g:DisableConfigurationDialog")
+   		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
+		if choice == 1
+			if gitAvailable == 1
+				call CheckIfPluginsAreInstalled()
+			else
+				echo "Git is not available in your system. Please, install it and try again."
+				return
+			endif
+		endif
+		if choice == 2
+			return
+		endif
+		if choice == 3
+			call WriteToTopVimrc("let DisableConfigurationDialog = 1")
+		endif
 	endif
 endfunction
-
-function CheckAndInstallPlugins()
-
-endfunction
-
-
 
 function CheckIfPluginsAreInstalled()
 	let slash = GetOSSlash()
@@ -121,6 +134,11 @@ function CheckIfPluginsAreInstalled()
 	endif
 
 endfunction
+
+
+
+
+
 
 function GetOSSlash()
 	if has('win32') || has('win64')
@@ -150,16 +168,16 @@ funct! GetExecOutput(command)
     return output
 endfunct!
 
-function AskVim()
-   let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again", 2)
-   echo choice
-endfunction
-
 function WriteToTopVimrc(codeString)
 	let vimrc = readfile($MYVIMRC)
 	call writefile([a:codeString], $MYVIMRC, "b")
 	call writefile(vimrc, $MYVIMRC, "a")
 endfunction
+
+
+
+
+
 
 call ConfigureVim()
 
