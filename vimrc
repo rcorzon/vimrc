@@ -1,6 +1,71 @@
 
-" --------------------------------------------------------------
-" all the variables used in interactive dialogs are stored above
+" Use Lex as a file explorer instead of e
+" to open directories.
+function OpenFileOrLex(path)
+	if -f a:path
+		e a:path
+	else
+		Lex a:path
+	endif
+endfunction
+
+
+" https://unix.stackexchange.com/a/8296
+" Returns the output of an exec command
+funct! GetExecOutput(command)
+    redir =>output
+    silent exec a:command
+    redir END
+    return output
+endfunct!
+
+
+function WriteToVimConfigFile(codeString)
+	call writefile([a:codeString], $VIMADDCONFIG, "a")
+endfunction
+
+
+function GetOSSlash()
+	if has('win32') || has('win64')
+		return "\\"
+	endif
+		return "/"
+endfunction
+
+
+" Loads or creates a file to store variables used in dialogs 
+" or functions from this file. If none of these things can 
+" be done, g:NOVIMADDCONFIG is set to 1. 
+" ==========================================================
+
+let g:OSSlash = GetOSSlash()
+
+let g:vimrcPath = split($MYVIMRC, g:OSSlash)
+let g:vimrcPath = vimrcPath[0:-2]
+let g:vimrcPath = join(vimrcPath, g:OSSlash) 
+
+let $VIMADDCONFIG = g:vimrcPath . g:OSSlash . '.auto.vim'
+let g:NOVIMADDCONFIG = 0
+
+unlet g:vimrcPath
+
+try
+	source $VIMADDCONFIG
+catch
+	try
+		call writefile(['"Deleting this file will cause the auto installation process to start again'], $VIMADDCONFIG)
+	catch
+		let g:NOVIMADDCONFIG = 1
+	endtry
+endtry
+
+
+
+
+
+
+
+
 
 
 
@@ -91,7 +156,7 @@ function ConfigureVim()
 	endif
 
 	
-	if !exists("g:DisableConfigurationDialog")
+	if g:NOVIMADDCONFIG == 0 && !exists("g:DisableConfigurationDialog")
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 			if gitAvailable == 1
@@ -105,13 +170,13 @@ function ConfigureVim()
 			return
 		endif
 		if choice == 3
-			call WriteToTopVimrc("let DisableConfigurationDialog = 1")
+			call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
 		endif
 	endif
 endfunction
 
 function CheckIfPluginsAreInstalled()
-	let slash = GetOSSlash()
+	let slash = g:OSSlash
 
 	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
 
@@ -136,43 +201,6 @@ function CheckIfPluginsAreInstalled()
 endfunction
 
 
-
-
-
-
-function GetOSSlash()
-	if has('win32') || has('win64')
-		return "\\"
-	endif
-		return "/"
-endfunction
-
-
-" Use Lex as a file explorer instead of e
-" to open directories.
-function OpenFileOrLex(path)
-	if -f a:path
-		e a:path
-	else
-		Lex a:path
-	endif
-endfunction
-
-
-
-"https://unix.stackexchange.com/a/8296
-funct! GetExecOutput(command)
-    redir =>output
-    silent exec a:command
-    redir END
-    return output
-endfunct!
-
-function WriteToTopVimrc(codeString)
-	let vimrc = readfile($MYVIMRC)
-	call writefile([a:codeString], $MYVIMRC, "b")
-	call writefile(vimrc, $MYVIMRC, "a")
-endfunction
 
 
 
