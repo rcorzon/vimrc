@@ -161,6 +161,7 @@ function ConfigureVim()
 		if choice == 1
 			if gitAvailable == 1
 				call CheckIfPluginsAreInstalled()
+				call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
 			else
 				echo "Git is not available in your system. Please, install it and try again."
 				return
