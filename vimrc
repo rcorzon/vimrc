@@ -32,6 +32,114 @@ function GetOSSlash()
 		return "/"
 endfunction
 
+function IsGitAvailable()
+	let gitAvailable = 0
+	if has('win32') || has('win64')
+		let checkGitWinFunction = 'function Is-Git-Available(){ $output = powershell -command git | Out-String; if($output -like ''*usage:*'') { clear; return 0;} else { return }; }; Is-Git-Available'
+
+		let isGitInstalled = system(checkGitWinFunction)
+
+		" Kinda sloppy - We are measuring the string length, if it is longer
+		" than 2, it returned an error -.
+
+		if strlen(isGitInstalled) <= 2
+			let gitAvailable = 1
+		endif
+	endif
+	return gitAvailable
+endfunction
+
+" Configures VIM based on the OS which is running in.
+function ConfigureVim()
+
+	let gitAvailable = 0
+	if has('win32') || has('win64')
+		
+		" Set powershell as the default shell for 
+		" ! commands and terminal mode instead of CMD
+		set shell=powershell shellquote= shellpipe=\| shellxquote=
+		set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+		set shellredir=\|\ Out-File\ -Encoding\ UTF8
+	endif
+
+	if has('unix')	
+		" TODO: Configure VIM for Linux and Mac
+	endif
+endfunction
+
+function IsVundleInstalled()
+	if exists("g:isGitInstalled") && g:isGitInstalled == 1 && exists("$VUNDLEPATH")
+		try
+			let test = isdirectory($VUNDLEPATH)
+			return test
+		catch
+			return 0
+		endtry
+	endif
+	return 0
+endfunction
+
+function DownloadOrUpdatePlugins()
+	if g:NOVIMADDCONFIG == 0 && !exists("g:DisableConfigurationDialog")
+   		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
+		if choice == 1
+			if gitAvailable == 1
+				call CheckIfPluginsAreInstalled()
+				call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
+			else
+				echo "Git is not available in your system. Please, install it and try again."
+				return
+			endif
+		endif
+		if choice == 2
+			return
+		endif
+		if choice == 3
+			call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
+		endif
+	endif
+endfunction
+
+function CheckIfPluginsAreInstalled()
+	let slash = g:OSSlash
+
+	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
+
+	let pendingPlugins = 0
+
+	for plugin in g:pluginList
+
+		let pluginFolder = split(plugin, "/")
+		let pluginPath = pluginsPath . slash . pluginFolder[1]
+
+		if isdirectory(pluginPath) == 0
+			let pendingPlugins = 1
+			continue
+		endif
+	endfor
+
+	if pendingPlugins == 1
+		echo "There are missing plugins. Attempting to install them..."
+		exec 'PluginInstall'
+	endif
+
+endfunction
+
+
+
+
+
+
+
+
+
+
+
+" ============================================================
+" ============================================================
+" ============================================================
+" ============================================================
+
 
 " Loads or creates a file to store variables used in dialogs 
 " or functions from this file. If none of these things can 
@@ -45,9 +153,9 @@ let g:vimrcPath = vimrcPath[0:-2]
 let g:vimrcPath = join(vimrcPath, g:OSSlash) 
 
 let $VIMADDCONFIG = g:vimrcPath . g:OSSlash . '.auto.vim'
-let g:NOVIMADDCONFIG = 0
+let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle'
 
-unlet g:vimrcPath
+let g:NOVIMADDCONFIG = 0
 
 try
 	source $VIMADDCONFIG
@@ -59,15 +167,7 @@ catch
 	endtry
 endtry
 
-
-
-
-
-
-
-
-
-
+unlet g:vimrcPath
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -127,86 +227,9 @@ nmap ñ :
 nmap Ñ :
 nmap <C-Tab> gt
 
-" Configures VIM based on the OS which is running in.
-function ConfigureVim()
 
-	let gitAvailable = 0
-	if has('win32') || has('win64')
-		
-		" Set powershell as the default shell for 
-		" ! commands and terminal mode instead of CMD
-		set shell=powershell shellquote= shellpipe=\| shellxquote=
-		set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
-		set shellredir=\|\ Out-File\ -Encoding\ UTF8
-
-		let checkGitWinFunction = 'function Is-Git-Available(){ $output = powershell -command git | Out-String; if($output -like ''*usage:*'') { clear; return 0;} else { return }; }; Is-Git-Available'
-
-		let isGitInstalled = system(checkGitWinFunction)
-
-		" Kinda sloppy - We are measuring the string length, if it is longer
-		" than 2, it returned an error -.
-
-		if strlen(isGitInstalled) <= 2
-			let gitAvailable = 1
-		endif
-	endif
-
-	if has('unix')	
-		" TODO: Configure VIM for Linux and Mac
-	endif
-
-	
-	if g:NOVIMADDCONFIG == 0 && !exists("g:DisableConfigurationDialog")
-   		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
-		if choice == 1
-			if gitAvailable == 1
-				call CheckIfPluginsAreInstalled()
-				call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
-			else
-				echo "Git is not available in your system. Please, install it and try again."
-				return
-			endif
-		endif
-		if choice == 2
-			return
-		endif
-		if choice == 3
-			call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
-		endif
-	endif
-endfunction
-
-function CheckIfPluginsAreInstalled()
-	let slash = g:OSSlash
-
-	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
-
-	let pendingPlugins = 0
-
-	for plugin in g:pluginList
-
-		let pluginFolder = split(plugin, "/")
-		let pluginPath = pluginsPath . slash . pluginFolder[1]
-
-		if isdirectory(pluginPath) == 0
-			let pendingPlugins = 1
-			continue
-		endif
-	endfor
-
-	if pendingPlugins == 1
-		echo "There are missing plugins. Attempting to install them..."
-		exec 'PluginInstall'
-	endif
-
-endfunction
-
-
-
-
-
-
-
-
+" Starts Vim auto configuration
 call ConfigureVim()
+let g:isGitInstalled = IsGitAvailable()
+let g:isVundleInstalled = IsVundleInstalled()
 
