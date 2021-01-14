@@ -193,7 +193,7 @@ let g:vimrcPath = vimrcPath[0:-2]
 let g:vimrcPath = join(vimrcPath, g:OSSlash) 
 
 let $VIMADDCONFIG = g:vimrcPath . g:OSSlash . '.auto.vim'
-let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle'
+let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle/Vundle.vim'
 
 let g:NOVIMADDCONFIG = 0
 
@@ -213,7 +213,8 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=$VUNDLEPATH
+
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
