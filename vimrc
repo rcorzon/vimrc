@@ -139,10 +139,10 @@ function StartInstallationWizard()
 	let g:isGitInstalled = IsGitAvailable()
 	if g:isGitInstalled == 0
 		if !exists("g:userAlreadyWarnedAboutGit")
-			echo "You need to install Git in your operative system in order to be able to auto configure Vim"
+			echo "You need to install Git in your operative system in order to be able to auto configure Vim."
 			call WriteToVimConfigFile("let g:userAlreadyWarnedAboutGit = 1")
-			return
 		endif
+		return
 	endif
 
 	let g:isVundleInstalled = IsVundleInstalled()
