@@ -12,12 +12,12 @@ endfunction
 
 " https://unix.stackexchange.com/a/8296
 " Returns the output of an exec command
-funct! GetExecOutput(command)
+function GetExecOutput(command)
     redir =>output
     silent exec a:command
     redir END
     return output
-endfunct!
+endfunction
 
 
 function WriteToVimConfigFile(codeString)
@@ -68,7 +68,7 @@ function ConfigureVim()
 endfunction
 
 function IsVundleInstalled()
-	if exists("g:isGitInstalled") && g:isGitInstalled == 1 && exists("$VUNDLEPATH")
+	if exists("$VUNDLEPATH")
 		try
 			let test = isdirectory($VUNDLEPATH)
 			return test
@@ -79,17 +79,21 @@ function IsVundleInstalled()
 	return 0
 endfunction
 
+function InstallVundle()
+	if exists("g:isGitInstalled") && g:isGitInstalled == 1 && exists("$VUNDLEPATH")
+		silent exe "! git clone https://github.com/VundleVim/Vundle.vim " . $VUNDLEPATH
+		let success = IsVundleInstalled()
+		return success
+	endif
+	return 0
+endfunction
+
 function DownloadOrUpdatePlugins()
 	if g:NOVIMADDCONFIG == 0 && !exists("g:DisableConfigurationDialog")
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
-			if gitAvailable == 1
 				call CheckIfPluginsAreInstalled()
 				call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
-			else
-				echo "Git is not available in your system. Please, install it and try again."
-				return
-			endif
 		endif
 		if choice == 2
 			return
@@ -127,6 +131,42 @@ endfunction
 
 
 
+function StartInstallationWizard()
+	if !exists("g:NOVIMADDCONFIG")
+		return
+	endif
+
+	let g:isGitInstalled = IsGitAvailable()
+	if g:isGitInstalled == 0
+		if !exists("g:userAlreadyWarnedAboutGit")
+			echo "You need to install Git in your operative system in order to be able to auto configure Vim"
+			call WriteToVimConfigFile("let g:userAlreadyWarnedAboutGit = 1")
+			return
+		endif
+	endif
+
+	let g:isVundleInstalled = IsVundleInstalled()
+	if g:isVundleInstalled == 0
+		let choice = confirm("You must install Vundle in order to continue. Do you want to proceed?", "&Yes\n&No\n&", 2)
+		if choice == 1
+			echo "Downloading and installing Vundle. Please wait..."
+			call InstallVundle()
+			let g:isVundleInstalled = IsVundleInstalled()
+			if g:isVundleInstalled == 0
+				echo "There has been an error while installing Vundle. The path was " . $VUNDLEPATH 
+				echo "Delete the folder and try again."
+				return
+			else
+				echo "Vundle has been installed in " . $VUNDLEPATH . "."
+			endif
+		elseif choice == 2
+			return
+		endif
+	endif
+
+	call DownloadOrUpdatePlugins()
+
+endfunction
 
 
 
@@ -230,6 +270,5 @@ nmap <C-Tab> gt
 
 " Starts Vim auto configuration
 call ConfigureVim()
-let g:isGitInstalled = IsGitAvailable()
-let g:isVundleInstalled = IsVundleInstalled()
+call StartInstallationWizard()
 
