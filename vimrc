@@ -193,7 +193,7 @@ let g:vimrcPath = vimrcPath[0:-2]
 let g:vimrcPath = join(vimrcPath, g:OSSlash) 
 
 let $VIMADDCONFIG = g:vimrcPath . g:OSSlash . '.auto.vim'
-let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle/Vundle.vim'
+let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle' . g:OSSlash . 'Vundle.vim'
 
 let g:NOVIMADDCONFIG = 0
 
