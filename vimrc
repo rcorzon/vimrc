@@ -214,10 +214,7 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=$VUNDLEPATH
-
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+call vundle#begin($VUNDLEPATH . g:OSSlash . 'plugins')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
