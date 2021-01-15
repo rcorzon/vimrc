@@ -89,7 +89,7 @@ function InstallVundle()
 endfunction
 
 function DownloadOrUpdatePlugins()
-	if g:NOVIMADDCONFIG == 0 && !exists("g:DisableConfigurationDialog")
+	if !exists('g:NOVIMADDCONFIG') || !exists("g:DisableConfigurationDialog")
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 				call CheckIfPluginsAreInstalled()
@@ -158,6 +158,7 @@ function StartInstallationWizard()
 				return
 			else
 				echo "Vundle has been installed in " . $VUNDLEPATH . "."
+				echo "Restart Vim to continue with the installation process."
 			endif
 		elseif choice == 2
 			return
@@ -212,36 +213,38 @@ unlet g:vimrcPath
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=$VUNDLEPATH
-call vundle#begin($VUNDLEPATH . g:OSSlash . 'plugins')
+if isdirectory($VUNDLEPATH)
+	" set the runtime path to include Vundle and initialize
+	set rtp+=$VUNDLEPATH
+	call vundle#begin($VUNDLEPATH . g:OSSlash . 'plugins')
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+	" let Vundle manage Vundle, required
+	Plugin 'VundleVim/Vundle.vim'
 
-" In order to show the '>' characters in the Vim bar, the package
-" powerline-fonts is required, so, you will have to install it following the
-" instructions of this link:
-"
-" https://github.com/powerline/fonts
-"
+	" In order to show the '>' characters in the Vim bar, the package
+	" powerline-fonts is required, so, you will have to install it following the
+	" instructions of this link:
+	"
+	" https://github.com/powerline/fonts
+	"
 
-" Put all the plugins that you want to use
-" inside this array to automatize the process.
-let g:pluginList = [
-  \"mhinz/vim-startify",
-  \"vim-airline/vim-airline",
-  \"vim-airline/vim-airline-themes",
-  \"vim-airline/vim-airline-asdfasdf",
-  \]
+	" Put all the plugins that you want to use
+	" inside this array to automatize the process.
+	let g:pluginList = [
+	  \"mhinz/vim-startify",
+	  \"vim-airline/vim-airline",
+	  \"vim-airline/vim-airline-themes",
+	  \"vim-airline/vim-airline-asdfasdf",
+	  \]
 
-for plugin in g:pluginList
-	exec "Plugin \'" . plugin . "\'"
-endfor
+	for plugin in g:pluginList
+		exec "Plugin \'" . plugin . "\'"
+	endfor
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+	" All of your Plugins must be added before the following line
+	call vundle#end()            " required
+	filetype plugin indent on    " required
+endif
 
 
 " Personal settings
