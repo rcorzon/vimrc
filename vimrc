@@ -89,7 +89,7 @@ function InstallVundle()
 endfunction
 
 function DownloadOrUpdatePlugins()
-	if !exists('g:NOVIMADDCONFIG') || !exists("g:DisableConfigurationDialog")
+	if !exists('g:NOVIMADDCONFIG')
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 				call CheckIfPluginsAreInstalled()
@@ -132,7 +132,7 @@ endfunction
 
 
 function StartInstallationWizard()
-	if !exists("g:NOVIMADDCONFIG")
+	if !exists("g:NOVIMADDCONFIG") || (exists("g:DisableConfigurationDialog") && g:DisableConfigurationDialog == 1)
 		return
 	endif
 
@@ -147,7 +147,7 @@ function StartInstallationWizard()
 
 	let g:isVundleInstalled = IsVundleInstalled()
 	if g:isVundleInstalled == 0
-		let choice = confirm("You must install Vundle in order to continue. Do you want to proceed?", "&Yes\n&No\n&", 2)
+   		let choice = confirm("You must install Vundle in order to continue. Do you want to proceed?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 			echo "Downloading and installing Vundle. Please wait..."
 			call InstallVundle()
@@ -159,8 +159,12 @@ function StartInstallationWizard()
 			else
 				echo "Vundle has been installed in " . $VUNDLEPATH . "."
 				echo "Restart Vim to continue with the installation process."
+				return
 			endif
 		elseif choice == 2
+			return
+		elseif choice == 3 
+			call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
 			return
 		endif
 	endif
