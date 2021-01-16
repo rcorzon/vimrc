@@ -67,6 +67,20 @@ function ConfigureVim()
 	endif
 endfunction
 
+function SetConfigFile()
+	try
+		source $VIMADDCONFIG
+		let g:NOVIMADDCONFIG = 1
+	catch
+		try
+			call writefile(['"Deleting this file will cause the auto installation process to start again'], $VIMADDCONFIG)
+			let g:NOVIMADDCONFIG = 1
+		catch
+			let g:NOVIMADDCONFIG = 0
+		endtry
+	endtry
+endfunction
+
 function IsVundleInstalled()
 	if exists("$VUNDLEPATH")
 		try
@@ -89,7 +103,7 @@ function InstallVundle()
 endfunction
 
 function DownloadOrUpdatePlugins()
-	if !exists('g:NOVIMADDCONFIG')
+	if exists('g:NOVIMADDCONFIG') && g:NOVIMADDCONFIG != 0
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 				call CheckIfPluginsAreInstalled()
@@ -105,16 +119,14 @@ function DownloadOrUpdatePlugins()
 endfunction
 
 function CheckIfPluginsAreInstalled()
-	let slash = g:OSSlash
-
-	let pluginsPath = $HOME . slash . ".vim" . slash . "bundle"
+	let pluginsPath = $HOME . g:OSSlash . ".vim" . g:OSSlash . "bundle"
 
 	let pendingPlugins = 0
 
 	for plugin in g:pluginList
 
 		let pluginFolder = split(plugin, "/")
-		let pluginPath = pluginsPath . slash . pluginFolder[1]
+		let pluginPath = pluginsPath . g:OSSlash . pluginFolder[1]
 
 		if isdirectory(pluginPath) == 0
 			let pendingPlugins = 1
@@ -126,7 +138,6 @@ function CheckIfPluginsAreInstalled()
 		echo "There are missing plugins. Attempting to install them..."
 		exec 'PluginInstall'
 	endif
-
 endfunction
 
 
@@ -202,15 +213,7 @@ let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle' . g:OSSlash . 'Vundle.vim'
 
 let g:NOVIMADDCONFIG = 0
 
-try
-	source $VIMADDCONFIG
-catch
-	try
-		call writefile(['"Deleting this file will cause the auto installation process to start again'], $VIMADDCONFIG)
-	catch
-		let g:NOVIMADDCONFIG = 1
-	endtry
-endtry
+call SetConfigFile()
 
 unlet g:vimrcPath
 
