@@ -21,7 +21,7 @@ endfunction
 
 
 function WriteToVimConfigFile(codeString)
-	call writefile([a:codeString], $VIMADDCONFIG, "a")
+	call writefile([a:codeString], $VIMAUTOCOOKIES, "a")
 endfunction
 
 
@@ -69,14 +69,14 @@ endfunction
 
 function SetConfigFile()
 	try
-		source $VIMADDCONFIG
-		let g:NOVIMADDCONFIG = 1
+		source $VIMAUTOCOOKIES
+		let g:NOVIMAUTOCOOKIES = 1
 	catch
 		try
-			call writefile(['"Deleting this file will cause the auto installation process to start again'], $VIMADDCONFIG)
-			let g:NOVIMADDCONFIG = 1
+			call writefile(['"Deleting this file will cause the auto installation process to start again'], $VIMAUTOCOOKIES)
+			let g:NOVIMAUTOCOOKIES = 1
 		catch
-			let g:NOVIMADDCONFIG = 0
+			let g:NOVIMAUTOCOOKIES = 0
 		endtry
 	endtry
 endfunction
@@ -103,7 +103,7 @@ function InstallVundle()
 endfunction
 
 function DownloadOrUpdatePlugins()
-	if exists('g:NOVIMADDCONFIG') && g:NOVIMADDCONFIG != 0
+	if exists('g:NOVIMAUTOCOOKIES') && g:NOVIMAUTOCOOKIES != 0
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
 				call CheckIfPluginsAreInstalled()
@@ -143,7 +143,7 @@ endfunction
 
 
 function StartInstallationWizard()
-	if !exists("g:NOVIMADDCONFIG") || (exists("g:DisableConfigurationDialog") && g:DisableConfigurationDialog == 1)
+	if !exists("g:NOVIMAUTOCOOKIES") || (exists("g:DisableConfigurationDialog") && g:DisableConfigurationDialog == 1)
 		return
 	endif
 
@@ -199,7 +199,7 @@ endfunction
 
 " Loads or creates a file to store variables used in dialogs 
 " or functions from this file. If none of these things can 
-" be done, g:NOVIMADDCONFIG is set to 1. 
+" be done, g:NOVIMAUTOCOOKIES is set to 1. 
 " ==========================================================
 
 let g:OSSlash = GetOSSlash()
@@ -208,10 +208,10 @@ let g:vimrcPath = split($MYVIMRC, g:OSSlash)
 let g:vimrcPath = vimrcPath[0:-2]
 let g:vimrcPath = join(vimrcPath, g:OSSlash) 
 
-let $VIMADDCONFIG = g:vimrcPath . g:OSSlash . '.auto.vim'
+let $VIMAUTOCOOKIES = g:vimrcPath . g:OSSlash . '.autoCookies.vim'
 let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle' . g:OSSlash . 'Vundle.vim'
 
-let g:NOVIMADDCONFIG = 0
+let g:NOVIMAUTOCOOKIES = 0
 
 call SetConfigFile()
 
