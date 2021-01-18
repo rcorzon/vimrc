@@ -46,6 +46,10 @@ function IsGitAvailable()
 			let gitAvailable = 1
 		endif
 	endif
+	elseif has ('unix')
+		" TODO: Configure VIM for Linux and Mac
+
+	endif
 	return gitAvailable
 endfunction
 
@@ -64,9 +68,18 @@ function ConfigureVim()
 
 	if has('unix')	
 		" TODO: Configure VIM for Linux and Mac
+		
+		" In order to show the '>' characters in the Vim bar, the package
+		" powerline-fonts is required, so, you will have to install it following the
+		" instructions of this link:
+		"
+		" https://github.com/powerline/fonts
+		"
 	endif
 endfunction
 
+" Loads or creates a file to store variables used in dialogs 
+" or functions from this file. 
 function SetConfigFile()
 	try
 		source $VIMAUTOCOOKIES
@@ -188,19 +201,12 @@ endfunction
 
 
 
-
-
-
 " ============================================================
 " ============================================================
 " ============================================================
 " ============================================================
 
 
-" Loads or creates a file to store variables used in dialogs 
-" or functions from this file. If none of these things can 
-" be done, g:NOVIMAUTOCOOKIES is set to 1. 
-" ==========================================================
 
 let g:OSSlash = GetOSSlash()
 
@@ -228,12 +234,6 @@ if isdirectory($VUNDLEPATH)
 	" let Vundle manage Vundle, required
 	Plugin 'VundleVim/Vundle.vim'
 
-	" In order to show the '>' characters in the Vim bar, the package
-	" powerline-fonts is required, so, you will have to install it following the
-	" instructions of this link:
-	"
-	" https://github.com/powerline/fonts
-	"
 
 	" Put all the plugins that you want to use
 	" inside this array to automatize the process.
@@ -241,7 +241,6 @@ if isdirectory($VUNDLEPATH)
 	  \"mhinz/vim-startify",
 	  \"vim-airline/vim-airline",
 	  \"vim-airline/vim-airline-themes",
-	  \"vim-airline/vim-airline-asdfasdf",
 	  \]
 
 	for plugin in g:pluginList
