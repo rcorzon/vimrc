@@ -45,7 +45,6 @@ function IsGitAvailable()
 		if strlen(isGitInstalled) <= 2
 			let gitAvailable = 1
 		endif
-	endif
 	elseif has ('unix')
 		" TODO: Configure VIM for Linux and Mac
 
