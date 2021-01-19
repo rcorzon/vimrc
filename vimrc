@@ -227,6 +227,10 @@ let g:vimrcPath = split($MYVIMRC, g:OSSlash)
 let g:vimrcPath = vimrcPath[0:-2]
 let g:vimrcPath = join(vimrcPath, g:OSSlash) 
 
+if has('unix')
+	let g:vimrcPath = g:OSSlash . g:vimrcPath
+endif
+
 let $VIMAUTOCOOKIES = g:vimrcPath . g:OSSlash . '.autoCookies.vim'
 let $VUNDLEPATH = g:vimrcPath . g:OSSlash . 'bundle' . g:OSSlash . 'Vundle.vim'
 
