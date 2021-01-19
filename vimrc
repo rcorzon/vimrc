@@ -56,7 +56,20 @@ endfunction
 " Configures VIM based on the OS which is running in.
 function ConfigureVim()
 
-	let gitAvailable = 0
+	" We set the user folder as the initial directory.
+	cd $HOME
+
+	let g:airline_theme='badwolf'
+
+	set relativenumber
+	set number
+	syntax on
+
+	" Mapping keys
+	nmap ñ :
+	nmap Ñ :
+	nmap <C-Tab> gt
+
 	if has('win32') || has('win64')
 		
 		" Set powershell as the default shell for 
@@ -75,6 +88,10 @@ function ConfigureVim()
 		"
 		" https://github.com/powerline/fonts
 		"
+
+		"In Linux we can try this ones
+		"let g:airline#extensions#tabline#enabled = 1
+		"let g:airline_powerline_fonts = 1
 	endif
 endfunction
 
@@ -199,13 +216,10 @@ endfunction
 
 
 
-
-
 " ============================================================
 " ============================================================
 " ============================================================
 " ============================================================
-
 
 
 let g:OSSlash = GetOSSlash()
@@ -253,29 +267,6 @@ if isdirectory($VUNDLEPATH)
 endif
 
 
-" Personal settings
-" -----------------
-
-" We set the user folder as the initial directory.
-cd $HOME
-
-"In Linux we can try this ones
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline_powerline_fonts = 1
-
-let g:airline_theme='badwolf'
-
-set relativenumber
-set number
-syntax on
-
-" Mapping keys
-nmap ñ :
-nmap Ñ :
-nmap <C-Tab> gt
-
-
-" Starts Vim auto configuration
 call ConfigureVim()
 call StartInstallationWizard()
 
