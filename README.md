@@ -1,7 +1,15 @@
 # vimrc
-My personal vimrc file, used as a mere personal backup. 
+My personal, self-installing vimrc file.
 
-The main idea is to turn this file into a self installation configuration script, which gets everything ready to work from scratch. 
+This file allows to quickly set up Vim (or NeoVim), only requiring you to manually clone it and follow the configuration process. 
+
+Once installed, your setup will include...
+
+ - Vundle, with plugins such as...
+ 	- vim-startify.
+ 	- vim-airline.
+ 	- vim-airline-themes.
+ - Another changes.
 
 ### How to install
 
