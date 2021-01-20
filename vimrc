@@ -46,8 +46,15 @@ function IsGitAvailable()
 			let gitAvailable = 1
 		endif
 	elseif has ('unix')
-		" TODO: Configure VIM for Linux and Mac
+		let checkGitBashFunction = "hash git &> /dev/null && echo '0' || echo '1'"
+		silent let isGitInstalled = system(checkGitBashFunction)
+		let isGitInstalled = isGitInstalled[0:0]
 
+		if isGitInstalled == 0
+			let gitAvailable = 1
+		else
+			let gitAvailable = 0
+		endif
 	endif
 	return gitAvailable
 endfunction
