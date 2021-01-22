@@ -132,8 +132,7 @@ endfunction
 function InstallVundle()
 	if exists("g:isGitInstalled") && g:isGitInstalled == 1 && exists("$VUNDLEPATH")
 		silent exe "! git clone https://github.com/VundleVim/Vundle.vim " . $VUNDLEPATH
-		let success = IsVundleInstalled()
-		return success
+		return 1
 	endif
 	return 0
 endfunction
@@ -247,10 +246,10 @@ call SetConfigFile()
 
 unlet g:vimrcPath
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
 if isdirectory($VUNDLEPATH)
+	set nocompatible              " be iMproved, required
+	filetype off                  " required
+
 	" set the runtime path to include Vundle and initialize
 	set rtp+=$VUNDLEPATH
 	call vundle#begin($VUNDLEPATH . g:OSSlash . 'plugins')
