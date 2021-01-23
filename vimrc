@@ -1,15 +1,4 @@
 
-" Use Lex as a file explorer instead of e
-" to open directories.
-function OpenFileOrLex(path)
-	if -f a:path
-		e a:path
-	else
-		Lex a:path
-	endif
-endfunction
-
-
 " https://unix.stackexchange.com/a/8296
 " Returns the output of an exec command
 function GetExecOutput(command)
@@ -95,9 +84,8 @@ function ConfigureVim()
 		" https://github.com/powerline/fonts
 		"
 
-		"In Linux we can try this ones
-		"let g:airline#extensions#tabline#enabled = 1
-		"let g:airline_powerline_fonts = 1
+		let g:airline#extensions#tabline#enabled = 1
+		let g:airline_powerline_fonts = 1
 	endif
 endfunction
 
@@ -274,7 +262,6 @@ if isdirectory($VUNDLEPATH)
 	call vundle#end()            " required
 	filetype plugin indent on    " required
 endif
-
 
 call ConfigureVim()
 call StartInstallationWizard()
