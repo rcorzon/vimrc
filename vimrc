@@ -65,6 +65,7 @@ function ConfigureVim()
 	nmap Ñ :
 	nmap <C-Tab> gt
 
+
 	if has('win32') || has('win64')
 		
 		" Set powershell as the default shell for 
@@ -252,6 +253,7 @@ if isdirectory($VUNDLEPATH)
 	  \"mhinz/vim-startify",
 	  \"vim-airline/vim-airline",
 	  \"vim-airline/vim-airline-themes",
+	  \"aserebryakov/vim-todo-liststhemes",
 	  \]
 
 	for plugin in g:pluginList
