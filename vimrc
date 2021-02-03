@@ -130,8 +130,8 @@ function DownloadOrUpdatePlugins()
 	if exists('g:NOVIMAUTOCOOKIES') && g:NOVIMAUTOCOOKIES != 0
    		let choice = confirm("Do you want to download and install the plugins?", "&Yes\n&No\n&O No, and don't ask again.", 2)
 		if choice == 1
-				call CheckIfPluginsAreInstalled()
-				call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
+			exec 'PluginInstall'
+			call WriteToVimConfigFile("let DisableConfigurationDialog = 1")
 		endif
 		if choice == 2
 			return
