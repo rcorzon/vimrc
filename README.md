@@ -9,6 +9,7 @@ Once installed, your setup will include...
  	- vim-startify.
  	- vim-airline.
  	- vim-airline-themes.
+	- vim-todo-lists.
  - Another changes.
 
 ### How to install
@@ -23,5 +24,7 @@ Run the following command if Vim is already open,
 :source %
 ```
 or restart it again. You will be prompted with a dialog. Follow the instructions to complete the configuration process.
+
+**Note**: You may need to restart (Neo)Vim a couple of times if you are configuring it from scratch.
 
 
