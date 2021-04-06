@@ -253,7 +253,7 @@ if isdirectory($VUNDLEPATH)
 	  \"mhinz/vim-startify",
 	  \"vim-airline/vim-airline",
 	  \"vim-airline/vim-airline-themes",
-	  \"aserebryakov/vim-todo-liststhemes",
+	  \"aserebryakov/vim-todo-lists",
 	  \]
 
 	for plugin in g:pluginList
