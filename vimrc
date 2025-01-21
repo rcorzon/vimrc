@@ -54,7 +54,7 @@ function ConfigureVim()
 	" We set the user folder as the initial directory.
 	cd $HOME
 
-	let g:airline_theme='badwolf'
+	let g:airline_theme='bubblegum'
 
 	set relativenumber
 	set number
