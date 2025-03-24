@@ -58,6 +58,7 @@ function ConfigureVim()
 
 	set relativenumber
 	set number
+	set noshowmode
 	syntax on
 
 	" Mapping keys
