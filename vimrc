@@ -65,6 +65,7 @@ function ConfigureVim()
 	nmap ñ :
 	nmap Ñ :
 	nmap <C-Tab> gt
+	let g:airline#extensions#tabline#enabled = 1
 
 
 	if has('win32') || has('win64')
